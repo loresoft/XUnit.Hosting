@@ -53,10 +53,7 @@ public abstract class TestHostBase<TFixture> : IDisposable
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
-    public void Dispose()
-    {
-        WriteLogs();
-    }
+    public void Dispose() => WriteLogs();
 
 
     /// <summary>
@@ -64,12 +61,7 @@ public abstract class TestHostBase<TFixture> : IDisposable
     /// </summary>
     protected void WriteLogs()
     {
-        // find memory logger
-        var loggers = Services.GetServices<ILoggerProvider>();
-        var memoryLogger = loggers
-            .OfType<MemoryLoggerProvider>()
-            .FirstOrDefault();
-
+        var memoryLogger = GetMemoryLogger();
         if (memoryLogger == null)
             return;
 
@@ -82,5 +74,34 @@ public abstract class TestHostBase<TFixture> : IDisposable
 
         // reset logger
         memoryLogger.Clear();
+    }
+
+    /// <summary>
+    /// Gets the memory log entries.
+    /// </summary>
+    /// <returns>A readonly list of log entries</returns>
+    protected IReadOnlyList<MemoryLogEntry> GetLogEntries()
+    {
+        var memoryLogger = GetMemoryLogger();
+        if (memoryLogger == null)
+            return Array.Empty<MemoryLogEntry>();
+
+        return memoryLogger.GetEntries();
+    }
+
+    /// <summary>
+    /// Gets the memory logging provider.
+    /// </summary>
+    /// <returns></returns>
+    protected MemoryLoggerProvider? GetMemoryLogger()
+    {
+        // find memory logger
+        var loggers = Services.GetServices<ILoggerProvider>();
+        if (loggers == null)
+            return null;
+
+        return loggers
+            .OfType<MemoryLoggerProvider>()
+            .FirstOrDefault();
     }
 }
