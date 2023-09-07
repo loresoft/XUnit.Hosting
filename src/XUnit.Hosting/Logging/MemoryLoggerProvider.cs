@@ -61,13 +61,17 @@ public class MemoryLoggerProvider : ILoggerProvider, ISupportExternalScope
     /// </summary>
     public void Clear()
     {
+        #if NET6_0_OR_GREATER
         _logEntries.Clear();
+        #else
+        while(_logEntries.TryDequeue(out _));
+        #endif
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
-        _logEntries.Clear();
+        Clear();
     }
 
 

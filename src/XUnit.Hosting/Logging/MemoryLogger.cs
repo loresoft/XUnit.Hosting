@@ -29,9 +29,12 @@ public class MemoryLogger : ILogger
         IExternalScopeProvider? externalScopeProvider,
         Action<MemoryLogEntry> logWriter)
     {
-        ArgumentNullException.ThrowIfNull(name);
-        ArgumentNullException.ThrowIfNull(settings);
-        ArgumentNullException.ThrowIfNull(logWriter);
+        if (name is null)
+            throw new ArgumentNullException(nameof(name));
+        if (settings is null)
+            throw new ArgumentNullException(nameof(settings));
+        if (logWriter is null)
+            throw new ArgumentNullException(nameof(logWriter));
 
         _name = name;
         _settings = settings;
@@ -72,7 +75,8 @@ public class MemoryLogger : ILogger
         if (!IsEnabled(logLevel))
             return;
 
-        ArgumentNullException.ThrowIfNull(formatter);
+        if (formatter is null)
+            throw new ArgumentNullException(nameof(formatter));
 
         var message = formatter(state, exception);
         if (string.IsNullOrEmpty(message))

@@ -16,8 +16,9 @@ public static class MemoryLoggerExtentions
     /// <returns>The <see cref="ILoggingBuilder"/> so that additional calls can be chained.</returns>
     public static ILoggingBuilder AddMemoryLogger(this ILoggingBuilder builder)
     {
-        ArgumentNullException.ThrowIfNull(builder);
-
+        if (builder is null)
+            throw new ArgumentNullException(nameof(builder));
+        
         var descriptor = ServiceDescriptor.Singleton<ILoggerProvider, MemoryLoggerProvider>();
 
         builder.Services.TryAddEnumerable(descriptor);
@@ -33,9 +34,11 @@ public static class MemoryLoggerExtentions
     /// <returns>The <see cref="ILoggingBuilder"/> so that additional calls can be chained.</returns>
     public static ILoggingBuilder AddMemoryLogger(this ILoggingBuilder builder, MemoryLoggerSettings settings)
     {
-        ArgumentNullException.ThrowIfNull(builder);
-        ArgumentNullException.ThrowIfNull(settings);
-
+        if (builder is null)
+            throw new ArgumentNullException(nameof(builder));
+        if (settings is null)
+            throw new ArgumentNullException(nameof(settings));
+        
         var logger = new MemoryLoggerProvider(settings);
         var descriptor = ServiceDescriptor.Singleton<ILoggerProvider>(logger);
 
@@ -52,8 +55,9 @@ public static class MemoryLoggerExtentions
     /// <returns>The <see cref="ILoggingBuilder"/> so that additional calls can be chained.</returns>
     public static ILoggingBuilder AddMemoryLogger(this ILoggingBuilder builder, Action<MemoryLoggerSettings> configure)
     {
-        ArgumentNullException.ThrowIfNull(configure);
-
+        if (configure is null)
+            throw new ArgumentNullException(nameof(configure));
+        
         builder.AddMemoryLogger();
         builder.Services.Configure(configure);
 
