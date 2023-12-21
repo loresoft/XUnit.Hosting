@@ -5,6 +5,7 @@ using Xunit.Abstractions;
 
 namespace XUnit.Hosting.Tests;
 
+[Collection(DatabaseCollection.CollectionName)]
 public class HostTests : DatabaseTestBase
 {
     public HostTests(ITestOutputHelper output, DatabaseFixture databaseFixture) : base(output, databaseFixture)
