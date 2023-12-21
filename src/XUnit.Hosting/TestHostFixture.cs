@@ -72,6 +72,7 @@ public abstract class TestHostFixture
     /// <param name="builder">An interface for configuring logging providers</param>
     protected virtual void ConfigureLogging(HostBuilderContext context, ILoggingBuilder builder)
     {
+        builder.SetMinimumLevel(LogLevel.Debug);
         builder.AddMemoryLogger();
     }
 
