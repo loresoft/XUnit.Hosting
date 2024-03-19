@@ -10,7 +10,8 @@ namespace XUnit.Hosting;
 /// <summary>
 /// XUnit collection fixture that supports <see cref="IHostBuilder"/>
 /// </summary>
-public abstract class TestHostFixture
+[Obsolete("Use TestApplicationFixture instead")]
+public abstract class TestHostFixture : ITestHostFixture
 {
     private readonly IHostBuilder _builder;
     private readonly Lazy<IHost> _host;
@@ -44,7 +45,7 @@ public abstract class TestHostFixture
     /// <value>
     /// The host for this test.
     /// </value>
-    protected IHost Host => _host.Value;
+    public IHost Host => _host.Value;
 
     /// <summary>
     /// Gets the services configured for this test

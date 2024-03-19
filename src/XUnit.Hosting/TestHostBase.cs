@@ -8,12 +8,12 @@ using XUnit.Hosting.Logging;
 namespace XUnit.Hosting;
 
 /// <summary>
-/// 
+/// Base class for hosted unit tests
 /// </summary>
 /// <typeparam name="TFixture">The type of the fixture.</typeparam>
 /// <seealso cref="System.IDisposable" />
 public abstract class TestHostBase<TFixture> : IDisposable
-    where TFixture : TestHostFixture
+    where TFixture : ITestHostFixture
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="TestHostBase{TFixture}"/> class.

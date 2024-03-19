@@ -3,11 +3,13 @@ using Microsoft.Extensions.Hosting;
 
 namespace XUnit.Hosting.Tests;
 
-public class DatabaseFixture : TestHostFixture
+public class DatabaseFixture : TestApplicationFixture
 {
-    protected override void ConfigureServices(HostBuilderContext context, IServiceCollection collection)
+    protected override void ConfigureApplication(HostApplicationBuilder builder)
     {
-        collection.AddSingleton<IService, Service>();
-        collection.AddHostedService<DatabaseInitializer>();
+        base.ConfigureApplication(builder);
+
+        builder.Services.AddSingleton<IService, Service>();
+        builder.Services.AddHostedService<DatabaseInitializer>();
     }
 }
