@@ -8,7 +8,7 @@ namespace XUnit.Hosting;
 /// <summary>
 /// XUnit collection fixture that supports <see cref="HostApplicationBuilder"/>
 /// </summary>
-public abstract class TestApplicationFixture  : ITestHostFixture
+public abstract class TestApplicationFixture : ITestHostFixture
 {
     private readonly Lazy<IHost> _host;
 
@@ -61,7 +61,7 @@ public abstract class TestApplicationFixture  : ITestHostFixture
     /// <returns>A new instance of <see cref="HostApplicationBuilderSettings"/></returns>
     protected virtual HostApplicationBuilderSettings CreateBuilderSettings()
     {
-        return new HostApplicationBuilderSettings();
+        return new HostApplicationBuilderSettings { EnvironmentName = Environments.Development };
     }
 
     /// <summary>

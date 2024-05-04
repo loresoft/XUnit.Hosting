@@ -3,6 +3,7 @@ name: Build
 env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_ENVIRONMENT: github
   ASPNETCORE_ENVIRONMENT: github
   BUILD_PATH: "${{github.workspace}}/artifacts"
   COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
@@ -55,7 +56,7 @@ jobs:
 
       - name: Create Packages
         if: success() && github.event_name != 'pull_request'
-        run: dotnet pack --configuration Release --include-symbols --include-source --no-build --output "${{env.BUILD_PATH}}"
+        run: dotnet pack --configuration Release --no-build --output "${{env.BUILD_PATH}}"
 
       - name: Upload Packages
         if: success() && github.event_name != 'pull_request'
