@@ -13,7 +13,6 @@ namespace XUnit.Hosting;
 [Obsolete("Use TestApplicationFixture instead")]
 public abstract class TestHostFixture : ITestHostFixture
 {
-    private readonly IHostBuilder _builder;
     private readonly Lazy<IHost> _host;
 
     /// <summary>
@@ -21,14 +20,14 @@ public abstract class TestHostFixture : ITestHostFixture
     /// </summary>
     protected TestHostFixture()
     {
-        _builder = Microsoft.Extensions.Hosting.Host
+        HostBuilder = Microsoft.Extensions.Hosting.Host
             .CreateDefaultBuilder()
             .ConfigureAppConfiguration(ConfigureApplication)
             .ConfigureLogging(ConfigureLogging)
             .ConfigureServices(ConfigureServices);
 
         // trigger start only when host is used
-        _host = new Lazy<IHost>(_builder.Start);
+        _host = new Lazy<IHost>(HostBuilder.Start);
     }
 
     /// <summary>
@@ -37,7 +36,7 @@ public abstract class TestHostFixture : ITestHostFixture
     /// <value>
     /// The host builder for this test.
     /// </value>
-    protected IHostBuilder HostBuilder => _builder;
+    protected IHostBuilder HostBuilder { get; }
 
     /// <summary>
     /// Gets the host for this test.

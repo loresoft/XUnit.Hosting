@@ -1,5 +1,3 @@
-using System.Runtime.Serialization;
-
 using Microsoft.Extensions.Logging;
 
 namespace XUnit.Hosting.Logging;
