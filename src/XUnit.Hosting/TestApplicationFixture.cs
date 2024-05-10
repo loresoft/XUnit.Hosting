@@ -59,9 +59,9 @@ public abstract class TestApplicationFixture : ITestHostFixture
     /// Creates the settings for constructing an Microsoft.Extensions.Hosting.HostApplicationBuilder.
     /// </summary>
     /// <returns>A new instance of <see cref="HostApplicationBuilderSettings"/></returns>
-    protected virtual HostApplicationBuilderSettings CreateBuilderSettings()
+    protected virtual HostApplicationBuilderSettings? CreateBuilderSettings()
     {
-        return new HostApplicationBuilderSettings { EnvironmentName = Environments.Development };
+        return null;
     }
 
     /// <summary>
