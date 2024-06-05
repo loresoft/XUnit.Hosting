@@ -14,7 +14,7 @@ public class DatabaseInitializer : IHostedService
 
     public static bool IsStarted = false;
 
-    public static bool IsStoped = false;
+    public static bool IsStopped = false;
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -28,7 +28,7 @@ public class DatabaseInitializer : IHostedService
     {
         _logger.LogInformation("Initialize Database StopAsync()");
 
-        IsStoped = true;
+        IsStopped = true;
         return Task.CompletedTask;
     }
 }

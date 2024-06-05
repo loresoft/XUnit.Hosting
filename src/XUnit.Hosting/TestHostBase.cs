@@ -19,11 +19,11 @@ public abstract class TestHostBase<TFixture> : IDisposable
     /// Initializes a new instance of the <see cref="TestHostBase{TFixture}"/> class.
     /// </summary>
     /// <param name="output">Represents a class which can be used to provide test output</param>
-    /// <param name="ficture"> The collection test fixture.</param>
-    protected TestHostBase(ITestOutputHelper output, TFixture ficture)
+    /// <param name="fixture"> The collection test fixture.</param>
+    protected TestHostBase(ITestOutputHelper output, TFixture fixture)
     {
         Output = output;
-        Fixture = ficture;
+        Fixture = fixture;
     }
 
     /// <summary>
