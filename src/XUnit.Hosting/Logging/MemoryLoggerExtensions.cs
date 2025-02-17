@@ -7,7 +7,7 @@ namespace XUnit.Hosting.Logging;
 /// <summary>
 /// Extension methods for the <see cref="ILoggerFactory"/> class.
 /// </summary>
-public static class MemoryLoggerExtentions
+public static class MemoryLoggerExtensions
 {
     /// <summary>
     /// Adds a memory logger named 'MemoryLogger' to the factory.

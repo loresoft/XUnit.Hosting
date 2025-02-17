@@ -81,7 +81,7 @@ public class MemoryLoggerProvider : ILoggerProvider, ISupportExternalScope
     /// <returns>A readonly list of log entries</returns>
     public IReadOnlyList<MemoryLogEntry> GetEntries()
     {
-        return _logEntries.ToArray();
+        return [.. _logEntries];
     }
 
 
@@ -91,7 +91,9 @@ public class MemoryLoggerProvider : ILoggerProvider, ISupportExternalScope
 
         // ensure capacity
         while (_logEntries.Count > _settings.Capacity)
+        {
             if (!_logEntries.TryDequeue(out _))
                 break;
+        }
     }
 }

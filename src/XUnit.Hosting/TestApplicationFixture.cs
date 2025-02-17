@@ -65,7 +65,7 @@ public abstract class TestApplicationFixture : ITestHostFixture
     }
 
     /// <summary>
-    /// Configures the application using the secified <paramref name="builder"/>.
+    /// Configures the application using the specified <paramref name="builder"/>.
     /// </summary>
     /// <param name="builder">The host application builder to configure.</param>
     protected virtual void ConfigureApplication(HostApplicationBuilder builder)
