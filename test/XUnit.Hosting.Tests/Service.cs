@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace XUnit.Hosting.Tests;
 
@@ -11,7 +11,7 @@ public class Service : IService
         _logger = logger;
     }
 
-    public static bool IsRun = false;
+    public static bool IsRun { get; set; }
 
     public bool Run()
     {
