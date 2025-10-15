@@ -71,6 +71,15 @@ public abstract class TestHostBase<TFixture>(TFixture fixture) : IDisposable
         => Xunit.TestContext.Current;
 
     /// <summary>
+    /// Gets the cancellation token for the current test, which can be used to cancel asynchronous operations.
+    /// </summary>
+    /// <value>
+    /// A <see cref="CancellationToken"/> instance that can be used to signal cancellation.
+    /// </value>
+    public CancellationToken TestCancellation
+        => Xunit.TestContext.Current.CancellationToken;
+
+    /// <summary>
     /// Gets the collection test fixture that provides the hosted test environment.
     /// </summary>
     /// <value>
