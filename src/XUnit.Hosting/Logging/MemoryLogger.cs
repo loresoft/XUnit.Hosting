@@ -20,7 +20,7 @@ public class MemoryLogger : ILogger
     /// <param name="scopeProvider">The external scope provider for managing log scopes.</param>
     /// <param name="logWriter">The action that writes log entries to the memory buffer.</param>
     /// <exception cref="ArgumentNullException">
-    /// Thrown when <paramref name="category"/>, <paramref name="settings"/>, 
+    /// Thrown when <paramref name="category"/>, <paramref name="settings"/>,
     /// <paramref name="scopeProvider"/>, or <paramref name="logWriter"/> is <c>null</c>.
     /// </exception>
     public MemoryLogger(
@@ -29,10 +29,14 @@ public class MemoryLogger : ILogger
         IExternalScopeProvider scopeProvider,
         Action<MemoryLogEntry> logWriter)
     {
-        ArgumentNullException.ThrowIfNull(category);
-        ArgumentNullException.ThrowIfNull(settings);
-        ArgumentNullException.ThrowIfNull(scopeProvider);
-        ArgumentNullException.ThrowIfNull(logWriter);
+        if (category is null)
+            throw new ArgumentNullException(nameof(category));
+        if (settings is null)
+            throw new ArgumentNullException(nameof(settings));
+        if (scopeProvider is null)
+            throw new ArgumentNullException(nameof(scopeProvider));
+        if (logWriter is null)
+            throw new ArgumentNullException(nameof(logWriter));
 
         _category = category;
         _settings = settings;
@@ -96,7 +100,8 @@ public class MemoryLogger : ILogger
         if (!IsEnabled(logLevel))
             return;
 
-        ArgumentNullException.ThrowIfNull(formatter);
+        if (formatter is null)
+            throw new ArgumentNullException(nameof(formatter));
 
         // generate the message
         var message = formatter(state, exception);
@@ -107,17 +112,15 @@ public class MemoryLogger : ILogger
         var scopes = new List<object?>();
         _scopeProvider.ForEachScope((current, scopes) => scopes.Add(current), scopes);
 
-        var entry = new MemoryLogEntry
-        {
-            Timestamp = DateTime.UtcNow,
-            LogLevel = logLevel,
-            EventId = eventId,
-            Category = _category,
-            Message = message,
-            Exception = exception,
-            State = state,
-            Scopes = scopes
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: DateTime.UtcNow,
+            logLevel: logLevel,
+            eventId: eventId,
+            category: _category,
+            message: message,
+            exception: exception,
+            state: state,
+            scopes: scopes);
 
         _logWriter(entry);
     }

@@ -3,7 +3,7 @@ using Xunit;
 namespace XUnit.Hosting;
 
 /// <summary>
-/// Provides a base class for XUnit test classes that require access to a hosted test environment 
+/// Provides a base class for XUnit test classes that require access to a hosted test environment
 /// with dependency injection and service provider functionality.
 /// </summary>
 /// <typeparam name="TFixture">
@@ -11,12 +11,12 @@ namespace XUnit.Hosting;
 /// </typeparam>
 /// <remarks>
 /// <para>
-/// This abstract class simplifies writing integration tests by providing convenient access to 
-/// the test fixture, service provider, and XUnit test context. Derive from this class when your 
+/// This abstract class simplifies writing integration tests by providing convenient access to
+/// the test fixture, service provider, and XUnit test context. Derive from this class when your
 /// tests need access to a configured host and its dependency injection container.
 /// </para>
 /// <para>
-/// The class implements <see cref="IDisposable"/> to ensure proper cleanup of test resources. 
+/// The class implements <see cref="IDisposable"/> to ensure proper cleanup of test resources.
 /// Override <see cref="Dispose(bool)"/> in derived classes if additional cleanup is needed.
 /// </para>
 /// </remarks>
@@ -28,7 +28,7 @@ namespace XUnit.Hosting;
 ///     public MyTests(MyTestFixture fixture) : base(fixture)
 ///     {
 ///     }
-///     
+///
 ///     [Fact]
 ///     public void TestMyService()
 ///     {
@@ -47,11 +47,11 @@ public abstract class TestHostBase<TFixture>(TFixture fixture) : IDisposable
     /// Gets the <see cref="ITestOutputHelper"/> for the current test, which can be used to write diagnostic output.
     /// </summary>
     /// <value>
-    /// An <see cref="ITestOutputHelper"/> instance for the currently executing test, 
+    /// An <see cref="ITestOutputHelper"/> instance for the currently executing test,
     /// or <see langword="null"/> if no test is currently executing.
     /// </value>
     /// <remarks>
-    /// This property provides access to XUnit's test output helper, allowing you to write 
+    /// This property provides access to XUnit's test output helper, allowing you to write
     /// diagnostic messages that will be captured and associated with the current test execution.
     /// </remarks>
     public ITestOutputHelper? OutputHelper
@@ -64,7 +64,7 @@ public abstract class TestHostBase<TFixture>(TFixture fixture) : IDisposable
     /// An <see cref="ITestContext"/> instance containing information about the currently executing test.
     /// </value>
     /// <remarks>
-    /// The test context provides access to test metadata such as the test method, test class, 
+    /// The test context provides access to test metadata such as the test method, test class,
     /// display name, and other contextual information about the current test execution.
     /// </remarks>
     public ITestContext TestContext
@@ -77,7 +77,7 @@ public abstract class TestHostBase<TFixture>(TFixture fixture) : IDisposable
     /// The <typeparamref name="TFixture"/> instance that was injected through the constructor.
     /// </value>
     /// <remarks>
-    /// The fixture is shared across all tests in the collection and provides access to the 
+    /// The fixture is shared across all tests in the collection and provides access to the
     /// configured host and its services. Use this property to access fixture-specific functionality.
     /// </remarks>
     public TFixture Fixture { get; } = fixture;
@@ -86,22 +86,22 @@ public abstract class TestHostBase<TFixture>(TFixture fixture) : IDisposable
     /// Gets the <see cref="IServiceProvider"/> containing the dependency injection services configured for the test.
     /// </summary>
     /// <value>
-    /// An <see cref="IServiceProvider"/> instance from the test fixture that can be used to resolve 
+    /// An <see cref="IServiceProvider"/> instance from the test fixture that can be used to resolve
     /// services registered in the host's dependency injection container.
     /// </value>
     /// <remarks>
-    /// This is a convenience property that provides direct access to <c>Fixture.Services</c>, 
+    /// This is a convenience property that provides direct access to <c>Fixture.Services</c>,
     /// making it easier to resolve services in your test methods.
     /// </remarks>
     public IServiceProvider Services
         => Fixture.Services;
 
     /// <summary>
-    /// Releases the unmanaged resources used by the <see cref="TestHostBase{TFixture}"/> 
+    /// Releases the unmanaged resources used by the <see cref="TestHostBase{TFixture}"/>
     /// and optionally releases the managed resources.
     /// </summary>
     /// <param name="disposing">
-    /// <see langword="true"/> to release both managed and unmanaged resources; 
+    /// <see langword="true"/> to release both managed and unmanaged resources;
     /// <see langword="false"/> to release only unmanaged resources.
     /// </param>
     /// <remarks>
@@ -130,7 +130,7 @@ public abstract class TestHostBase<TFixture>(TFixture fixture) : IDisposable
     /// Releases all resources used by the <see cref="TestHostBase{TFixture}"/>.
     /// </summary>
     /// <remarks>
-    /// This method is called by XUnit after each test method completes, ensuring proper cleanup 
+    /// This method is called by XUnit after each test method completes, ensuring proper cleanup
     /// of test resources. Override <see cref="Dispose(bool)"/> to add custom cleanup logic.
     /// </remarks>
     public void Dispose()

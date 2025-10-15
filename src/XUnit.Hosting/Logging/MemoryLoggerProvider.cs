@@ -25,7 +25,9 @@ public class MemoryLoggerProvider : ILoggerProvider, ISupportExternalScope
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="settings"/> is <c>null</c>.</exception>
     public MemoryLoggerProvider(IOptions<MemoryLoggerSettings> settings)
     {
-        ArgumentNullException.ThrowIfNull(settings);
+        if (settings is null)
+            throw new ArgumentNullException(nameof(settings));
+
         _settings = settings.Value;
     }
 
@@ -47,7 +49,8 @@ public class MemoryLoggerProvider : ILoggerProvider, ISupportExternalScope
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="category"/> is <c>null</c>.</exception>
     public ILogger CreateLogger(string category)
     {
-        ArgumentNullException.ThrowIfNull(category);
+        if (category is null)
+            throw new ArgumentNullException(nameof(category));
 
         return _loggers.GetOrAdd(category, _ =>
             new MemoryLogger(category, _settings, _scopeProvider, AddLogEntry));
@@ -102,7 +105,7 @@ public class MemoryLoggerProvider : ILoggerProvider, ISupportExternalScope
     /// </summary>
     public void Clear()
     {
-        _logEntries.Clear();
+        while (_logEntries.TryDequeue(out _)) ;
     }
 
 

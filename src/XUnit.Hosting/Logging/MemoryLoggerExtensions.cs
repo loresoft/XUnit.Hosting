@@ -17,7 +17,8 @@ public static class MemoryLoggerExtensions
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="builder"/> is <c>null</c>.</exception>
     public static ILoggingBuilder AddMemoryLogger(this ILoggingBuilder builder)
     {
-        ArgumentNullException.ThrowIfNull(builder);
+        if (builder is null)
+            throw new ArgumentNullException(nameof(builder));
 
         // Register MemoryLoggerSettings for configuration
         builder.Services.AddOptions<MemoryLoggerSettings>();
@@ -41,7 +42,8 @@ public static class MemoryLoggerExtensions
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="configure"/> is <c>null</c>.</exception>
     public static ILoggingBuilder AddMemoryLogger(this ILoggingBuilder builder, Action<MemoryLoggerSettings> configure)
     {
-        ArgumentNullException.ThrowIfNull(configure);
+        if (configure is null)
+            throw new ArgumentNullException(nameof(configure));
 
         builder.AddMemoryLogger();
         builder.Services.Configure(configure);

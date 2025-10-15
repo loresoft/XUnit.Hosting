@@ -10,11 +10,12 @@ public class MemoryLogEntryTests
     public void Constructor_WithRequiredProperties_ShouldSucceed()
     {
         // Arrange & Act
-        var entry = new MemoryLogEntry
-        {
-            Category = "TestCategory",
-            Message = "Test message"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: default,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message");
 
         // Assert
         Assert.Equal("TestCategory", entry.Category);
@@ -39,17 +40,15 @@ public class MemoryLogEntryTests
         var state = new { UserId = 123, RequestId = "abc-123" };
 
         // Act
-        var entry = new MemoryLogEntry
-        {
-            Timestamp = timestamp,
-            LogLevel = LogLevel.Error,
-            EventId = eventId,
-            Category = "TestCategory",
-            Message = "Test message",
-            Exception = exception,
-            State = state,
-            Scopes = scopes
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: timestamp,
+            logLevel: LogLevel.Error,
+            eventId: eventId,
+            category: "TestCategory",
+            message: "Test message",
+            exception: exception,
+            state: state,
+            scopes: scopes);
 
         // Assert
         Assert.Equal(timestamp, entry.Timestamp);
@@ -67,13 +66,12 @@ public class MemoryLogEntryTests
     public void ToString_WithMinimalData_ShouldFormatCorrectly()
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            EventId = new EventId(0),
-            Category = "TestCategory",
-            Message = "Test message"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Information,
+            eventId: new EventId(0),
+            category: "TestCategory",
+            message: "Test message");
 
         // Act
         var result = entry.ToString();
@@ -87,13 +85,12 @@ public class MemoryLogEntryTests
     public void ToString_WithEventId_ShouldIncludeEventId()
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Warning,
-            EventId = new EventId(42, "TestEvent"),
-            Category = "TestCategory",
-            Message = "Test message"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Warning,
+            eventId: new EventId(42, "TestEvent"),
+            category: "TestCategory",
+            message: "Test message");
 
         // Act
         var result = entry.ToString();
@@ -108,13 +105,13 @@ public class MemoryLogEntryTests
     {
         // Arrange
         var exception = new InvalidOperationException("Something went wrong");
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Error,
-            Category = "TestCategory",
-            Message = "Error occurred",
-            Exception = exception
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Error,
+            eventId: default,
+            category: "TestCategory",
+            message: "Error occurred",
+            exception: exception);
 
         // Act
         var result = entry.ToString();
@@ -130,13 +127,13 @@ public class MemoryLogEntryTests
     public void ToString_WithScopes_ShouldIncludeScopes()
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            Category = "TestCategory",
-            Message = "Test message",
-            Scopes = new List<object?> { "Scope1", "Scope2" }
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Information,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message",
+            scopes: new List<object?> { "Scope1", "Scope2" });
 
         // Act
         var result = entry.ToString();
@@ -153,13 +150,13 @@ public class MemoryLogEntryTests
     public void ToString_WithEmptyScopes_ShouldNotIncludeScopesSection()
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            Category = "TestCategory",
-            Message = "Test message",
-            Scopes = new List<object?>()
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Information,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message",
+            scopes: new List<object?>());
 
         // Act
         var result = entry.ToString();
@@ -180,12 +177,12 @@ public class MemoryLogEntryTests
     public void ToString_WithDifferentLogLevels_ShouldFormatCorrectly(LogLevel logLevel, string expectedPrefix)
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = logLevel,
-            Category = "TestCategory",
-            Message = "Test message"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: logLevel,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message");
 
         // Act
         var result = entry.ToString();
@@ -201,16 +198,15 @@ public class MemoryLogEntryTests
         // Arrange
         var exception = new ArgumentException("Invalid argument");
         var state = new { UserId = 42, Action = "UpdateProfile" };
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Error,
-            EventId = new EventId(500, "ValidationError"),
-            Category = "App.Validation",
-            Message = "Validation failed for user input",
-            Exception = exception,
-            State = state,
-            Scopes = new List<object?> { "Scope1" }
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Error,
+            eventId: new EventId(500, "ValidationError"),
+            category: "App.Validation",
+            message: "Validation failed for user input",
+            exception: exception,
+            state: state,
+            scopes: new List<object?> { "Scope1" });
 
         // Act
         var result = entry.ToString();
@@ -224,90 +220,16 @@ public class MemoryLogEntryTests
     }
 
     [Fact]
-    public void Record_Equality_WithSameValues_ShouldBeEqual()
-    {
-        // Arrange
-        var timestamp = DateTime.UtcNow;
-        var eventId = new EventId(100, "Test");
-        var scopes = new List<object?>();
-
-        var entry1 = new MemoryLogEntry
-        {
-            Timestamp = timestamp,
-            LogLevel = LogLevel.Information,
-            EventId = eventId,
-            Category = "TestCategory",
-            Message = "Test message",
-            Scopes = scopes
-        };
-        var entry2 = new MemoryLogEntry
-        {
-            Timestamp = timestamp,
-            LogLevel = LogLevel.Information,
-            EventId = eventId,
-            Category = "TestCategory",
-            Message = "Test message",
-            Scopes = scopes
-        };
-
-        // Act & Assert
-        Assert.Equal(entry1, entry2);
-        Assert.True(entry1 == entry2);
-    }
-
-    [Fact]
-    public void Record_Equality_WithDifferentValues_ShouldNotBeEqual()
-    {
-        // Arrange
-        var entry1 = new MemoryLogEntry
-        {
-            Category = "TestCategory",
-            Message = "Message 1"
-        };
-        var entry2 = new MemoryLogEntry
-        {
-            Category = "TestCategory",
-            Message = "Message 2"
-        };
-
-        // Act & Assert
-        Assert.NotEqual(entry1, entry2);
-        Assert.True(entry1 != entry2);
-    }
-
-    [Fact]
-    public void With_ShouldCreateModifiedCopy()
-    {
-        // Arrange
-        var original = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            Category = "Original",
-            Message = "Original message"
-        };
-
-        // Act
-        var modified = original with { Message = "Modified message" };
-
-        // Assert
-        Assert.Equal("Original", original.Category);
-        Assert.Equal("Original message", original.Message);
-        Assert.Equal("Original", modified.Category);
-        Assert.Equal("Modified message", modified.Message);
-        Assert.NotEqual(original, modified);
-    }
-
-    [Fact]
     public void ToString_WithLongMessage_ShouldIncludeFullMessage()
     {
         // Arrange
         var longMessage = new string('A', 1000);
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            Category = "TestCategory",
-            Message = longMessage
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Information,
+            eventId: default,
+            category: "TestCategory",
+            message: longMessage);
 
         // Act
         var result = entry.ToString();
@@ -320,12 +242,12 @@ public class MemoryLogEntryTests
     public void ToString_WithSpecialCharactersInMessage_ShouldHandleCorrectly()
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            Category = "TestCategory",
-            Message = "Message with special chars: @#$%^&*()_+-=[]{}|;':\",./<>?"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Information,
+            eventId: default,
+            category: "TestCategory",
+            message: "Message with special chars: @#$%^&*()_+-=[]{}|;':\",./<>?");
 
         // Act
         var result = entry.ToString();
@@ -338,11 +260,12 @@ public class MemoryLogEntryTests
     public void Scopes_DefaultValue_ShouldBeEmptyList()
     {
         // Arrange & Act
-        var entry = new MemoryLogEntry
-        {
-            Category = "TestCategory",
-            Message = "Test message"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: default,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message");
 
         // Assert
         Assert.NotNull(entry.Scopes);
@@ -355,13 +278,13 @@ public class MemoryLogEntryTests
         // Arrange
         var innerException = new ArgumentException("Inner error");
         var outerException = new InvalidOperationException("Outer error", innerException);
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Error,
-            Category = "TestCategory",
-            Message = "Error with nested exceptions",
-            Exception = outerException
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Error,
+            eventId: default,
+            category: "TestCategory",
+            message: "Error with nested exceptions",
+            exception: outerException);
 
         // Act
         var result = entry.ToString();
@@ -377,13 +300,12 @@ public class MemoryLogEntryTests
     public void ToString_MultiLineFormat_ShouldHaveCorrectStructure()
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            EventId = new EventId(42),
-            Category = "TestCategory",
-            Message = "Test message"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Information,
+            eventId: new EventId(42),
+            category: "TestCategory",
+            message: "Test message");
 
         // Act
         var result = entry.ToString();
@@ -399,13 +321,13 @@ public class MemoryLogEntryTests
     public void ToString_WithMultipleScopes_ShouldIncludeAllScopes()
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            Category = "TestCategory",
-            Message = "Test message",
-            Scopes = new List<object?> { "Scope1", "Scope2", "Scope3" }
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Information,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message",
+            scopes: new List<object?> { "Scope1", "Scope2", "Scope3" });
 
         // Act
         var result = entry.ToString();
@@ -421,12 +343,12 @@ public class MemoryLogEntryTests
     public void ToString_LogLevelNone_ShouldUseNoneAsPrefix()
     {
         // Arrange
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.None,
-            Category = "TestCategory",
-            Message = "Test message"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.None,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message");
 
         // Act
         var result = entry.ToString();
@@ -440,13 +362,13 @@ public class MemoryLogEntryTests
     {
         // Arrange
         var state = new { UserId = 123, RequestId = "abc-123" };
-        var entry = new MemoryLogEntry
-        {
-            LogLevel = LogLevel.Information,
-            Category = "TestCategory",
-            Message = "Test message",
-            State = state
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: LogLevel.Information,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message",
+            state: state);
 
         // Act
         var result = entry.ToString();
@@ -465,11 +387,12 @@ public class MemoryLogEntryTests
     public void State_DefaultValue_ShouldBeNull()
     {
         // Arrange & Act
-        var entry = new MemoryLogEntry
-        {
-            Category = "TestCategory",
-            Message = "Test message"
-        };
+        var entry = new MemoryLogEntry(
+            timestamp: default,
+            logLevel: default,
+            eventId: default,
+            category: "TestCategory",
+            message: "Test message");
 
         // Assert
         Assert.Null(entry.State);
