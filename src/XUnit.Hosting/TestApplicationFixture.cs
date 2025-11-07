@@ -22,20 +22,14 @@ namespace XUnit.Hosting;
 /// </remarks>
 public abstract class TestApplicationFixture : ITestHostFixture, IDisposable
 {
-    private readonly Lazy<IHost> _host;
-    private bool _disposed;
+#if NET9_0_OR_GREATER
+    private readonly Lock _lock = new();
+#else
+    private readonly object _lock = new();
+#endif
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TestApplicationFixture"/> class.
-    /// </summary>
-    /// <remarks>
-    /// The host is created lazily and will not be initialized until the <see cref="Host"/>
-    /// or <see cref="Services"/> property is first accessed.
-    /// </remarks>
-    protected TestApplicationFixture()
-    {
-        _host = new Lazy<IHost>(CreateHost);
-    }
+    private bool _disposed;
+    private IHost? _host;
 
     /// <summary>
     /// Gets the <see cref="IHost"/> instance for the test collection.
@@ -48,7 +42,20 @@ public abstract class TestApplicationFixture : ITestHostFixture, IDisposable
     /// The host is lazily initialized on first access. Once created, the same instance is reused
     /// for all tests in the collection.
     /// </remarks>
-    public IHost Host => _host.Value;
+    public IHost Host
+    {
+        get
+        {
+            if (_host != null)
+                return _host;
+
+            // using Lazy<T> causes issues. Use double-check locking instead.
+            lock (_lock)
+                _host ??= CreateHost();
+
+            return _host;
+        }
+    }
 
     /// <summary>
     /// Gets the <see cref="IServiceProvider"/> containing the dependency injection services configured for the test collection.
@@ -183,9 +190,7 @@ public abstract class TestApplicationFixture : ITestHostFixture, IDisposable
 
         _disposed = true;
 
-        if (disposing && _host.IsValueCreated)
-        {
-            _host.Value.Dispose();
-        }
+        if (disposing && _host != null)
+            _host.Dispose();
     }
 }
