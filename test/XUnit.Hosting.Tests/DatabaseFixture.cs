@@ -13,9 +13,8 @@ namespace XUnit.Hosting.Tests;
 
 public class DatabaseFixture : TestApplicationFixture, IAsyncLifetime
 {
-    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder()
-        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-        .WithPassword("P@ssw0rd123!")
+    private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2025-latest")
+        .WithPassword("Bn87bBYhLjYRj%9zRgUc")
         .Build();
 
     public async ValueTask InitializeAsync()
